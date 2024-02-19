@@ -5,6 +5,7 @@ const dotenv  = require('dotenv')
 dotenv.config()
 const router = express.Router()
 const bodyParser = require('body-parser')
+const helper = require('../Main/Helpers/Helper'); 
 
 app.use(bodyParser.json());
 
@@ -21,14 +22,18 @@ router.post('/item', (req,res)=> {
 
     try {
     const item_name = req.body.item_name;
-    const item_price = req.body.item_price;
+    const item_price = parseInt(req.body.item_price);
     const item_availability = req.body.item_availability;
-    const item_quantity = req.body.item_quantity;
+    const item_quantity = parseInt(req.body.item_quantity);
 
-    let msg = '';
+    let msg;
     if (!item_name) 
     {
         return res.json(msg = 'item name is required');
+    }
+    if (!(helper.regexFunction(item_name))) 
+    {
+        return res.json(msg = 'Invalid item name');
     }
     if (!item_price)
     {
@@ -45,6 +50,10 @@ router.post('/item', (req,res)=> {
     if (!item_quantity)
     {
         return res.json(msg = 'item_quantity is required');
+    }
+    if (!(helper.regexFunction(item_quantity))) 
+    {
+        return res.json(msg = 'Invalid item quantity');
     }
     
     const  sql = "INSERT INTO items_table (name, price, availability,quantity) VALUES (?,?,?,?)";
@@ -71,7 +80,7 @@ router.get('/item-retrive', (req,res)=> {
         const sql = "SELECT * FROM items_table";
         con.query(sql, (error, result)=> { 
             if (error) throw error;
-            console.log(result);
+
             return res.json({
                 status: true,
                 code: 200,
@@ -167,36 +176,9 @@ router.put('/edit/item/:id', (req,res)=> {
     }
 });
 
-
+//Here the test function 
 router.get('/test/:id', (req,res)=> {
 
-    const id = req.params.id;
-    const sql1 = "SELECT item_id FROM items_table";
-
-    con.query(sql1, [], (error, results) => {
-      if (error) {
-        throw error;
-      }
-    
-      if (results[0].item_id == id) {
-        console.log('Ok');
-        return res.json({
-            status: true,
-            code: 200,
-            data: `Done`
-        }); 
-      }
-      else {
-        console.log('NotOk');
-        return res.json({
-            status: true,
-            code: 200,
-            data: `${id} Not Found`
-        }); 
-      }
-      console.log(results);
-    
-    });
 });
 
 router.delete('/remove/item/:id', (req,res)=> {
