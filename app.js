@@ -93,7 +93,7 @@ router.put('/edit/item/:id', (req,res)=> {
     
     try {
 
-        const ids = req.params.id;
+        const ids =  parseInt(req.params.id);
         const item_name = req.body.item_name;
         const item_price = req.body.item_price;
         const item_availability = req.body.item_availability;
@@ -126,16 +126,23 @@ router.put('/edit/item/:id', (req,res)=> {
              
               if (error) throw error;
               console.log(results);
-             
-            const itemIds = results.map(result => result.item_id);
-            console.log(itemIds);
-            console.log(req.params.id);
             
-              if (req.params.id) {
+              
+                const itemIds = results.map(result => result.item_id);
+                console.log(itemIds);
+                console.log(req.params.id);
+                console.log(itemIds.includes(ids));
 
-              }
-             
-              else {
+              //Here - when includes function check something in a code it strickly consider about the datatype as well
+            if (!itemIds.includes(ids))
+            {
+                return res.json({
+                    status: false,
+                    code: 400,
+                    data: `${ids} Is Not Found`
+                }); 
+            }
+            else {
 
             const sql = "UPDATE items_table SET name = ?, price = ?, availability = ?, quantity = ? WHERE item_id = ?";
             con.query(sql,[item_name,item_price,item_availability,item_quantity,ids], (error,result)=> {
