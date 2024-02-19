@@ -93,6 +93,7 @@ router.put('/edit/item/:id', (req,res)=> {
     
     try {
 
+        // const ids =  req.params.id; (It takes as a string value need to pass as a integer)
         const ids =  parseInt(req.params.id);
         const item_name = req.body.item_name;
         const item_price = req.body.item_price;
@@ -125,12 +126,8 @@ router.put('/edit/item/:id', (req,res)=> {
             con.query(sql1, (error, results) => {
              
               if (error) throw error;
-              console.log(results);
-            
               
-                const itemIds = results.map(result => result.item_id);
-                console.log(itemIds);
-                console.log(req.params.id);
+                const itemIds = results.map(result => result.item_id); 
                 console.log(itemIds.includes(ids));
 
               //Here - when includes function check something in a code it strickly consider about the datatype as well
@@ -168,8 +165,6 @@ router.put('/edit/item/:id', (req,res)=> {
             data: error
         }); 
     }
-  
-
 });
 
 
