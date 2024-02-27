@@ -31,7 +31,7 @@ router.post('/item', (req,res)=> {
     {
         return res.json(msg = 'item name is required');
     }
-    if (!(helper.regexFunction(item_name))) 
+    if (!(helper.regexFunctionString(item_name))) 
     {
         return res.json(msg = 'Invalid item name');
     }
@@ -51,10 +51,10 @@ router.post('/item', (req,res)=> {
     {
         return res.json(msg = 'item_quantity is required');
     }
-    if (!(helper.regexFunction(item_quantity))) 
-    {
-        return res.json(msg = 'Invalid item quantity');
-    }
+    // if (!(helper.regexFunctionNum(item_quantity))) 
+    // {
+    //     return res.json(msg = 'Invalid item quantity');
+    // }
     
     const  sql = "INSERT INTO items_table (name, price, availability,quantity) VALUES (?,?,?,?)";
     con.query(sql,[item_name,item_price,item_availability,item_quantity],  (error, result) =>  {
@@ -218,3 +218,9 @@ con.connect((error)=> {
     $res = error ? $msg = `Something Went wrong ${error}` : $msg = `Database Connected Successfully`;
     console.log($res);
 });
+
+
+module.exports = {
+    router,
+    app
+}
