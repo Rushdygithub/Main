@@ -1,3 +1,6 @@
+// const crypto = require('crypto')
+const bcrypt = require('bcrypt')
+
 const regexFunctionString = (params) => {
     
     let regex;
@@ -15,4 +18,18 @@ const regexFunctionNum = (params) => {
 
 }
 
-module.exports = {regexFunctionString,regexFunctionNum};
+const passHash = (password) => {
+    const saltRound = 5
+
+    bcrypt.hash(password, saltRound, function(err, hash) {
+        if (err) throw err
+       console.log(hash)
+    });
+
+
+    
+}
+
+
+
+module.exports = {regexFunctionString,regexFunctionNum,passHash};
